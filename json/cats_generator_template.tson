@@ -1,0 +1,12 @@
+[
+    '{{repeat(10)}}',
+    {
+        id: '{{index}}',
+        name: '{{firstName}}',
+        ageInMonths: '{{numeric(2,6)}}',
+        short_description: '{{lorem(2,sentences)}}',
+        small_photo_url: 'http://placekitten.com/64/64',
+        long_description: '{{lorem(1,paragraphs)}}',
+        large_photo_url: 'http://placekitten.com/200/200'
+    }
+]
