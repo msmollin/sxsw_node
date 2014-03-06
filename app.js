@@ -50,23 +50,35 @@ var loginCallback = function(req,res){
 	if (req.body['password'] !== 'test'){ console.log('wrong password'); res.send(401);  return;}
 	fs.readFile('json/login.json', function (err, data) {
 	  if (err) throw err;
-	  res.send(JSON.parse(data));
+		var loginObj = JSON.parse(data);
+		fs.readFile('json/cats.json', function (err, data) {
+		  if (err) throw err;
+			var catsObj = shortCatsJsonObj(data);
+			loginObj['cats'] = catsObj;
+			res.send(loginObj);
+		});
 	});
 };
 app.post('/login',loginCallback);
 
 //*** Cats Route ***//
+
+var shortCatsJsonObj = function(data){
+	var catsObj = JSON.parse(data);
+	for (index = 0; index < catsObj.length; ++index){
+		delete catsObj[index]['long_description'];
+		delete catsObj[index]['large_photo_url'];
+	}
+	return catsObj;
+};
+
 var catsCallback = function(req,res){
 	fs.readFile('json/cats.json', function (err, data) {
 	  if (err) throw err;
-		var catsObj = JSON.parse(data);
-		for (index = 0; index < catsObj.length; ++index){
-			delete catsObj[index]['long_description'];
-			delete catsObj[index]['large_photo_url'];
-		}
-	  res.send(catsObj);
+		res.send(shortCatsJsonObj(data));
 	});
 };
+
 app.get('/cats', accessTokenRequired, catsCallback);
 
 //*** Single Cat Route ***//
