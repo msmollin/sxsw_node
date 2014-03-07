@@ -18,12 +18,6 @@ app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(app.router);
 
-//Set the Content Type
-app.use(function(req, res, next) {
-  res.contentType('application/json');
-  next();
-});
-
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
@@ -88,7 +82,7 @@ var singleCatCallback = function(req,res){
 	fs.readFile('json/cats.json', function (err, data) {
 		if (err) throw err;
 	  var catsObj = JSON.parse(data);
-	  res.send(catsObj[cat_id]);
+	  res.json(catsObj[cat_id]);
 	});
 };
 app.get('/cats/:id', accessTokenRequired, singleCatCallback);
