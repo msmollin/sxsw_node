@@ -11,7 +11,7 @@ var fs = require('fs');
 var app = express();
 
 // all environments
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 5000);
 app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
@@ -55,9 +55,10 @@ var loginCallback = function(req,res){
 		  if (err) throw err;
 			var catsObj = shortCatsJsonObj(data);
 			loginObj['cats'] = catsObj;
-			res.send(loginObj);
+			res.json(loginObj);
 		});
 	});
+	// res.send(200);
 };
 app.post('/login',loginCallback);
 
@@ -75,7 +76,7 @@ var shortCatsJsonObj = function(data){
 var catsCallback = function(req,res){
 	fs.readFile('json/cats.json', function (err, data) {
 	  if (err) throw err;
-		res.send(shortCatsJsonObj(data));
+		res.json(shortCatsJsonObj(data));
 	});
 };
 
@@ -90,7 +91,7 @@ var singleCatCallback = function(req,res){
 	  res.send(catsObj[cat_id]);
 	});
 };
-app.get('/cats/:id',accessTokenRequired, singleCatCallback);
+app.get('/cats/:id', accessTokenRequired, singleCatCallback);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
